@@ -1,0 +1,10 @@
+//Higher order functions: 
+//function is value, so that we can assign function into variable
+//function as parameter
+//greet=function(){}
+const sayGreet = greet => greet()
+
+let welcome = () => console.log('welcome')
+sayGreet(welcome)
+
+sayGreet(() => console.log('welcome'))

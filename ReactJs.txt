@@ -1,0 +1,105 @@
+			 React/React.js
+.....................................................................................
+
+What is react?
+ A JavaScript library for building user interfaces.
+
+What is Angular?
+  Angular is javascript framework for building user interfaces
+
+What is Vue.js?
+ Vue.js is javascript framework for building user interfaces
+
+What is lib and framework?
+
+ lib solves only one problem where as framework provides every thing end to end to build apps
+
+Angular vs React:
+
+1.Design pattern
+
+ Angular uses traditional MVC design pattern two things
+
+ React uses "Flux" design pattern
+
+2.Coding style
+  
+ Any User interface development frameworks provides 
+  1.Markup  - html code,css
+  2.Data   
+
+Angular isloates 
+  markup(html,css) into separate  called "templates"
+  data into services(holding data and biz logic)
+
+React isloates
+  markup into js code
+  data into js code- hooks,state  management libs like redux...
+ React embeds every into javascript...
+
+Programming files 
+  Angular maintains lot of files, components,services,modules,directives,filters etc..which makes code base heavier
+
+  React maintains very less code - components,statement management files,hooks...
+
+Common things in both:
+
+ Component driven, props
+.....................................................................................
+			DOM,VDOM
+.....................................................................................
+
+What is DOM?
+   DOM is specification  released by W3c organgization,in order to build web apps for browsers.
+
+in order to understand DOM fully , we need to understand HTML very deeply.
+
+HTML:
+
+1.HTML IS PL? - YES
+2.HTML Is compiled -YES
+3.HTML is excuted-YES
+
+Hello.java --->compile--->Hello.class--->run----JVM(Runtime) executes code.
+
+index.html
+<html>
+<head></head>
+<title><title>
+<body>
+  <div>
+     <h1>Welcome</h1>
+  </div>
+</body>
+</html>
+|
+-------------------Browser
+loader---LOAD Code into browser
+ |
+  from file: or http:
+ |
+Parser :
+   Parser is special compiler which converts source into lexcial tree(string tree)
+
+body
+  div
+     h1
+        Welcome 
+     h1
+  div
+body
+ |
+ Complier-Compilation : Convert this into assembly
+|
+body -load xxx
+  div
+     h1
+        Welcome 
+     h1
+  div
+body
+.....................................................................................
+
+
+
+

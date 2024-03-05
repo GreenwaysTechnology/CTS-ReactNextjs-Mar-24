@@ -1054,6 +1054,7 @@ Here the code is having so many "then ables", in realtime if we have many more t
 ES 7 introduced new feature called "async and await"  which are keywords , when we resolve promises we dont need to use thens and catch.
 
 We can write more declarative,sync style of async code.
+
 const getUser = () => {
     console.info('getUser is called')
     return new Promise((resolve, reject) => {
@@ -1101,6 +1102,16 @@ main()
 ....................................................................................
 				Module Pattern-ES 6 Modules
 .....................................................................................
+Module patterns
+1.namespace design pattern
+2.AMD
+3.Commonjs
+4.ES 6 Module pattern
+5.System
+6.UMD
+
+COMMON JS and ES 6 only in dev..
+
 
 How to write code across files and folders?
 

@@ -18,8 +18,7 @@ Angular vs React:
 
 1.Design pattern
 
- Angular uses traditional MVC design pattern two things
-
+ Angular uses traditional MVC design pattern 
  React uses "Flux" design pattern
 
 2.Coding style
@@ -99,6 +98,750 @@ body -load xxx
   div
 body
 .....................................................................................
+				Runtime 
+.....................................................................................
+HTML Execution engine : Request Os ,to allocate memory :Runtime
+
+-LinkedList
+body -Node
+  div -Node
+     h1 -Node
+        Welcome -Node
+     h1
+  div
+body
+
+|
+ Linking the Nodes: Tree
+body  -Node
+  |
+  div -Node
+    |
+     h1 -Node
+      |
+        Welcome -Node
+        |
+     h1
+  div
+ |
+Layout/Paint Engine: will convert nodes into pxs : final output
+
+..............................................................................................
+Static web pages: htmls are displayed into browser.
+..............................................................................................
+In 1996,Netscap communication,Started an RND project called "How to manipulate the tree"
+
+Tree is written in c language,then we need another c program to communicate.
+
+But NETSCAP decided not to use C pl.
+
+Netscap wanted to put java like implementation inside browser to manipulate "Tree".
+
+that is birth of javascript.
+
+How to access nodes from javascript engine?
+  
+One spec was published ,As per that spec
+ "Document Object Model"
+    -How to represent document(elements/nodes) in object oriented way.->DOM
+
+ "Documents can be reprsented as Objects" : Object oriented Document Programming.
+
+............................................................................................
+
+How dom works?
+
+index.html           Browser runtime(C program)         Javascript Engine
+<h1>Hello</h1>       h1-Node                           h1- Object
+			Hello-Node			 Hello Object Property
+
+
+
+                 Every Html ELEMENT Inside Browser is "C Program"
+
+	       Every Html ELEMENT javascript engine is "Object"
+
+
+javascript developer ---->uses api --->to communicate Object---->js engine---->browser engine.	*************************************************************************************
+Who and when "H1" object is created?
+
+if you want to create object?
+
+ class/ function
+
+function Employee(){}  let emp = new Employee()
+
+
+<h1> => function HTMLHeadingElement(){} => let h =new HTMLHeadingElement() ?
+
+Note: For html elements, we cant create object directly, rather than JS Engine will create objects , return references to the developer to access.
+ How via factory Objects: object helps to get other documents
+
+
+Factory Object : HTML Document =>body
+
+document.getElementById();
+   |
+Implicit object reference variable which points HTMLDocument OBject.
+...................................................................................
+What is our objective here? DOM Programming?
+Enter into DOM programming:
+
+1.write dom programming using javascript language.
+
+<body>
+  |
+HTMLDocument : body : factory Object
+
+
+Document apis:
+
+Finding HTML Elements
+
+HTMLElement document.getElementById(id)
+      Find an element by element id
+HTMLElement Document document.getElementsByTagName(name)
+	Find elements by tag name
+HTMLElement document.getElementsByClassName(name)
+	Find elements by class name
+
+HTMLElement document.querySelectory(selector) 
+      find element/elements by selector
+
+
+Changing HTML Elements : update existing element
+......................
+element.innerHTML =  new html content	Change the inner HTML of an element
+element.attribute = new value	Change the attribute value of an HTML element
+element.style.property = new style	Change the style of an HTML element
+Method	Description
+element.setAttribute(attribute, value)	Change the attribute value of an HTML element
+
+Adding and Deleting Elements
+document.createElement(element)	Create an HTML element
+document.removeChild(element)	Remove an HTML element
+document.appendChild(element)	Add an HTML element
+document.replaceChild(new, old)	Replace an HTML element
+
+////////////////////////////////////////////////////////////////////////////////////////////
+DOM programming :
+
+Create new Element:
+
+1.create element
+2.attach that element on existing tree. appendChild
+
+function findElement() {
+      //get the h1
+      const element = document.getElementById('heading');
+      console.dir(element);
+      //get the content
+      console.log(element.innerHTML);
+}
+findElement();
+
+function updateElement() {
+      const element = document.getElementById('heading');
+      //element.innerText = 'Welcome to React' : Plain String
+      element.innerHTML = 'Welcome to React!'; // which is node
+}
+updateElement()
+
+function createElement() {
+      const element = document.createElement('h2');
+      element.innerHTML = 'Hey Buddy Are you new to DOM!';
+      //attach that element
+      document.body.appendChild(element);
+}
+createElement();
+
+function applyStyle() {
+      const element = document.getElementById('heading');
+      //css property inside javascript
+      element.style.backgroundColor = 'yellow'
+
+}
+applyStyle()
+
+User interaction : Event Handling : UI events
+
+Hardware events : mouse,keyboard,touch events
+application events : onload,onupdate,offline,online........
+
+How to add user interaction?
+
+Every dom element has ability to subscribe events called dom events.
+
+ways to attach events?
+
+1.inline events
+2.through coding
+
+eventattachment has syntax
+
+on+EventName = "callbackfunction /handler function"
+
+Event Object : Object asscioated with every dom element.
+
+ Which is proxy object between dom element and handler function.
+
+if you want to access any dom element inside event handler, event object will help
+event object is created and ready for use inside handler function arg.
+
+
+ <h1 id="heading" onmouseout="applyMouseOut(event)" onmouseover="applyDynamicStyle(event)">Welcome to DOM</h1>
+
+function applyDynamicStyle(e) {
+      console.dir(e);
+      const element = e.target;
+      console.log(element);
+      element.style.backgroundColor = 'green'
+
+}
+
+function applyMouseOut(e) {
+      const element = e.target;
+      element.style.backgroundColor = 'yellow'
+}
+
+
+<h1 id="heading">Welcome to DOM</h1>
+
+function applyDynamicStyle(e) {
+      console.dir(e);
+      const element = e.target;
+      console.log(element);
+      element.style.backgroundColor = 'green'
+
+}
+function applyMouseOut(e) {
+      const element = e.target;
+      element.style.backgroundColor = 'yellow'
+}
+
+document.getElementById('heading').addEventListener('mouseover', applyDynamicStyle)
+
+document.getElementById('heading').addEventListener('mouseout', applyMouseOut);
+...................................................................................
+javascript language can be used to manipulate web documents.
+
+When we use javascript language directly , we face lot of problems
+
+1.Complexity
+2.Performance
+3.No standard practice
+..................................................................................
+		Birth of Java script libs and frameworks
+....................................................................................
+
+In 2001,DOM Wrappers - libs /frameworks came into picture.
+ DOJO
+2005, JQuery
+
+After 2006 , community people started introducing so many js frameworks and libs..
+
+Most Popular libs and frameworks
+
+1.JQuery
+2.Angular.js
+3.Dojo
+4.Extjs
+5.Angular
+6.React
+7.Vue js
+etc.....
+
+Architecture tech stack for dom programming
+
+
+Plain JS
+			 Application(dom) -plain js
+			     |
+			 Javascript Engine
+			      |
+			  Browser Engine
+
+Framework/lib
+			 Application(JQuery)
+			     |
+		       ---------------------------
+			  JQuery Engine	------javascript programming		
+                       -------------------------------
+			      |
+			 Javascript Engine
+			      |
+			  Browser Engine
+
+
+
+
+Angular
+			 Application(Angular)
+			     |
+		       ---------------------------
+			  Angular Engine : Renderer(Ng2) Renderer2(Ng4,5),Ivy(6,7)		
+                       -------------------------------
+			      |
+			 Javascript Engine
+			      |
+			  Browser Engine
+
+React
+
+
+		       Application(React)
+			     |
+		       ---------------------------
+	             React Engine :React fiber-->React 16 on wards		
+                       -------------------------------
+			      |
+			 Javascript Engine
+			      |
+			  Browser Engine
+.....................................................................................
+
+How react represents dom inside react engine?
+
+Based on VDOM(Virtual DOM) specification...
+	The virtual DOM (VDOM) is a programming concept where an ideal, or “virtual”, representation of a UI is kept in memory and synced with the “real” DOM by a library such as ReactDOM. This process is called reconciliation.
+
+React is created by face book.
+
+React was created not for others but created for face book one of the use case called "Buddylist" / chat application.
+
+instagram web version was fully built by react.
+
+React most implementations
+
+1.flipkart ui is written react.
+2.espn cric info
+3.facebook use case chat , graph....
+4.netflix
+etc......
+
+Where we can use React ? What type of application we can build using react.
+
+Single Page web app...
+
+Data intensive application // Data driven app
+ where more data , which are chainging rapidly, where you want to update ui very faster with out ui flickering.
+
+React can be used to build application for 
+
+.........................................
+1.browsers : Desktop
+2.Mobile Apps : React Native
+
+face book is working on many futures projects related to react
+
+3.React VR : Virtual Reality.
+4.React Car : For car applications
+5.React TV (React Native)  : React for TV.
+6.React IOT : any devices
+
+We are going to learn react web for browsers.
+
+React core modules:
+
+react.js      => Core module
+react-dom.js  => Browser
+.....................................................................................				React and ui building
+...................................................................................
+
+React uses  a small programming language to describe UI called "JSX"
+
+As we discussed React is used in many app dev like browser,mobile,tv apps.
+
+Each app type(browser,mobile) has its own JSX syntax...
+
+Browser jsx uses HTML as language
+Mobile Jsx uses "Mobile markup" as language.
+
+-----------------------------------------------------------------------------
+ Markup layer             |  React Core Engine    | Render Engine   | Target
+-----------------------------------------------------------------------------
+
+HTML Markup---------------|  Object Tree(V.DOM)   | ReactDom.render |  Browser
+
+Mobile Markup-------------|  Object Tree          |ReactNative.render| Mobile /Tabs
+
+..............
+VR Markup---------------  |  Object Tree          |VR.render         |VR devices
+
+IOT Markup--------------- |  Object Tree          | IOT.render       |IOT Devices   
+....................................................................................
+Object Tree :
+
+Note : in js every html element is object, in browser every element is node which forms tree
+
+<div>
+   <h1>
+       hello
+   </h1>
+       |
+       div
+          |
+          h1
+            hello
+
+         |
+         divObject
+		|
+		H1 Object
+			hello
+
+
+		|
+		React engine
+		   |
+.....................................................................................
+			 React Project Setup
+.....................................................................................
+We are going to build single page web app.
+
+React teams offers tool set to create react project.
+
+create-react-app.
+
+How to install tool?
+
+There are two ways
+
+1.using global module
+
+npm install create-react-app  -g
+2.using npx command
+ npx create-react-app appName
+
+Recommended is npx command.
+G:\CTS>npx create-react-app welcome-app
+Need to install the following packages:
+create-react-app@5.0.1
+Ok to proceed? (y) y
+npm WARN deprecated tar@2.2.2: This version of tar is no longer supported, and will not receive security updates. Please upgrade asap.
+
+Creating a new React app in G:\CTS\welcome-app.
+
+Installing packages. This might take a couple of minutes.
+Installing react, react-dom, and react-scripts with cra-template...
+
+
+added 1490 packages in 2m
+
+254 packages are looking for funding
+  run `npm fund` for details
+
+Initialized a git repository.
+
+Installing template dependencies using npm...
+
+added 69 packages, and changed 1 package in 16s
+
+258 packages are looking for funding
+  run `npm fund` for details
+Removing template package using npm...
+
+
+removed 1 package, and audited 1559 packages in 4s
+
+258 packages are looking for funding
+  run `npm fund` for details
+
+8 vulnerabilities (2 moderate, 6 high)
+
+To address all issues (including breaking changes), run:
+  npm audit fix --force
+
+Run `npm audit` for details.
+
+Created git commit.
+
+Success! Created welcome-app at G:\CTS\welcome-app
+Inside that directory, you can run several commands:
+
+  npm start
+    Starts the development server.
+
+  npm run build
+    Bundles the app into static files for production.
+
+  npm test
+    Starts the test runner.
+
+  npm run eject
+    Removes this tool and copies build dependencies, configuration files
+    and scripts into the app directory. If you do this, you can’t go back!
+
+We suggest that you begin by typing:
+
+  cd welcome-app
+  npm start
+
+Happy hacking!
+
+....................................................................................
+			Exploring structure of the project
+
+package.json
+{
+  "name": "welcome-app",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@testing-library/jest-dom": "^5.17.0",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-scripts": "5.0.1",
+    "web-vitals": "^2.1.4"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
+
+
+public/index.html
+ 
+This is landing page for any single page app.
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta
+      name="description"
+      content="Web site created using create-react-app"
+    />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    <!--
+      manifest.json provides metadata used when your web app is installed on a
+      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
+    -->
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <!--
+      Notice the use of %PUBLIC_URL% in the tags above.
+      It will be replaced with the URL of the `public` folder during the build.
+      Only files inside the `public` folder can be referenced from the HTML.
+
+      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
+      work correctly both with client-side routing and a non-root public URL.
+      Learn how to configure a non-root public URL by running `npm run build`.
+    -->
+    <title>React App</title>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root">
+      
+
+    </div>
+    <!--
+      This HTML file is a template.
+      If you open it directly in the browser, you will see an empty page.
+
+      You can add webfonts, meta tags, or analytics to this file.
+      The build step will place the bundled scripts into the <body> tag.
+
+      To begin the development, run `npm start` or `yarn start`.
+      To create a production bundle, use `npm run build` or `yarn build`.
+    -->
+  </body>
+</html>
+
+
+src
+  folder contains source code of app.
+
+src/index.js
+ It is entry file for app
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import './index.css';
+import App from './App';
+import reportWebVitals from './reportWebVitals';
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
+...................................................................................
+			   DOM programming using plain js
+...................................................................................
+
+//dom element using java script
+
+function createHeadElement() {
+    console.log('dom  is being initalized')
+    //create Element
+    const divElement = document.getElementById('root')
+    element.innerHTML = 'Hello React!'
+    divElement.appendChild(element)
+}
+createHeadElement();
+
+...................................................................................
+			   DOM Programming using React
+...................................................................................
+
+//dom element creation using React.
+
+import ReactDOM from 'react-dom/client';
+
+const Heading = <h1>Hello React!!!</h1>
+
+const rootElement =  document.getElementById('root')
+const root = ReactDOM.createRoot(rootElement);
+root.render(Heading)
+
+.....................................................................................
+	JSX - java script and XML - langugage to create User interfaces
+.....................................................................................
+
+React uses declarative dom programing using a mini language invented by facebook : JSX
+
+JSX : - javascript xml
+
+ 1.PL language built by face book to write user interfaces.
+ 2.JSX is collection of html markup and javascript.
+ 3.JSX is dsl and declarative.
+ 4.Every device has its own jsx language syntax.
+ 5.Browsers jsx can't be used for building mobile application.
+
+
+Since jsx  is a language cant be executed on browser /mobile directly.
+..................................................................................
+JSX compilation model:
+
+                   layout.js / layout.jsx
+		       |
+		    compiler - babel.js 
+			|
+		    plain js code
+			|-----------------------Dev cycle
+	----------------------------------------- -- Excution cycles Starts
+  Runtime : React Engine  compiled code feed into react engine
+			|
+		     Excute compiled js code : function calls
+			|
+	     create virtual Object tree (in browser V-dom)
+		        |
+		     Render Engine ; will convert react object tree into js dom object tree
+			|
+		   Flush the tree into target
+			|
+	--------------------------------------------
+        |
+     Browser
+
+
+JSX is used to create dom elements.
+
+Every DOM element is object.
+
+What is Component ?
+  Component is Object , Coined by MS in 1989.
+
+According to ms, Component is object which has state(date),behaviour(methods) + User interface(Visual).
+ eg:Button,TextBox,Grid,Menu,MenuBar,Layout,Table.....
+
+Like Object tree(DOM Tree), In React we can create "Component" Tree.
+
+
+      Node===DOM Object====Component
+       h1     HTMLHeading   Heading
+
+"React apps are made out of components. A Component is piece of the UI that has its own logic and appearance, A Component can be small as a button or as large as an entire Page"
+.....................................................................................
+In coding 
+
+Threre two libs 
+1.react.js  => to create component and manages all features related component.
+2.react-dom => Render engine.
+
+react.js
+
+1.React
+  It top level class which provides all apis to create,delete,update components.
+
+
+react-dom.js
+
+2.ReactDOM
+   It is top level class which provides api to flush the v.dom into real dom.
+..................................................................................
+			Component Creational patterns
+...................................................................................
+
+
+1.variable pattern
+2.functional pattern
+3.es 6 class pattern
+
+Components can be created any one or mixed way  style.
+"functional Pattern" is more popular and recommended pattern....
+
+Eg:
+Variable Pattern:
+import ReactDOM from 'react-dom/client';
+
+//variable Pattern
+//Heading is variable <h1>Hello</h1> is comonent
+const Heading = <h1>Hello React!!!</h1>
+
+const rootElement =  document.getElementById('root')
+const root = ReactDOM.createRoot(rootElement);
+root.render(Heading)
+
+2.functional pattern:
+import ReactDOM from 'react-dom/client';
+
+
+//create a component : using es 5 function
+// function Heading() {
+//     //return jsx 
+//     return <h1>
+//         Hello Functional React!
+//     </h1>
+// }
+//arrow function
+// const Heading = () => {
+//     return <h1>Hello</h1>
+// }
+const Heading = () => <h1>Hello</h1>
+
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+
+// root.render(Heading())
+root.render(<Heading></Heading>)
 
 
 

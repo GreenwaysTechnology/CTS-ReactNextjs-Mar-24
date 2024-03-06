@@ -888,7 +888,7 @@ Essentially, a promise is a returned object to which you attach callbacks, inste
 
 ....................................................................................
 
-		Promise Implemenation: Object Object creations
+		Promise Implemenation: Object  creations
 ...................................................................................
 
 1. Create Promise Object from Promise contructor
@@ -1111,6 +1111,9 @@ Module patterns
 6.UMD
 
 COMMON JS and ES 6 only in dev..
+
+
+
 
 
 How to write code across files and folders?

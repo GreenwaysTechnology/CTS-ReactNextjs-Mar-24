@@ -842,6 +842,365 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 
 // root.render(Heading())
 root.render(<Heading></Heading>)
+....................................................................................
+			 class components
+...................................................................................
+	
+import ReactDOM from 'react-dom/client';
+import React from 'react';
+
+class Heading extends React.Component {
+
+    render() {
+        return <div>
+            <h1>Hello React</h1>
+        </div>
+    }
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+
+root.render(<Heading></Heading>)
+.....................................................................................
+			Exploring JSX
+.....................................................................................
+
+JS-Javascript
+X -  XML
+
+Since HTML parser is weak, but when y write react code, we need consistent code generation.
+
+So that react team, developed compiler follows basic xml rules.
+
+
+Basic XML  rules:
+
+1.every opened element must be closed
+  <h1>Hello</h1>
+  <Welcome></Welcome>
+ some elements may not have closing tag
+  <img /> : image element has no child elements : self closing. 
+
+2. In xml you must have one single root element.
+  all elements must be organized under single root element.
+
+ <h1>Welcome to React</h1>
+ <p>Path finder</p>
+
+In html what can be root element
+ <div>,<span>,all html 5 layout elements header,footer,section,aside...
+
+			
+const Welcome = ()=>{
+    return <div>
+        <h1>Hello
+    </div>
+}
+This code will throw error.
+
+Self closing:
+import ReactDOM from 'react-dom/client';
+import logo from './logo.svg';
+
+//must have closing tag
+// const Welcome = ()=>{
+//     return <div>
+//         <h1>Hello
+//     </div>
+// }
+const Welcome = () => {
+    return <div>
+        <img src={logo} className="App-logo" alt="logo" />
+    </div>
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+
+// root.render(<Welcome></Welcome>)
+root.render(<Welcome/>)
+.....................................................................................
+
+Root Element:
+
+import ReactDOM from 'react-dom/client';
+import logo from './logo.svg';
+
+const Welcome = () => {
+    return <div>
+        <h1>Site Heading</h1>
+        <p>This is react</p>
+    </div>
+}
+
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+
+root.render(<Welcome />)
+.....................................................................................
+			  Fragments
+....................................................................................
+
+Fragements are used to wrap elements in visible way.
+
+Suppose if i dont want any root element, then we can use Fragement.
+
+Fragements are used to escape from compiler.
+
+Syntax:
+
+ <React.Fragment>
+
+ </React.Fragement>
+
+
+ <Fragment>
+
+ </Fragement>
+
+
+ <>
+
+ </>
+import ReactDOM from 'react-dom/client';
+// import React, { Fragment } from 'react';
+
+// const Welcome = () => {
+//     return <React.Fragment>
+//         <h1>Site Heading</h1>
+//         <p>This is react</p>
+//     </React.Fragment>
+// }
+
+// const Welcome = () => {
+//     return <Fragment>
+//         <h1>Site Heading</h1>
+//         <p>This is react</p>
+//     </Fragment>
+// }
+
+const Welcome = () => {
+    return <>
+        <h1>Site Heading</h1>
+        <p>This is react</p>
+    </>
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+
+root.render(<Welcome />)
+.....................................................................................
+			Component Compostition
+....................................................................................
+
+How to create component?
+You have to think how to break components as simple as possible...
+
+
+//component compostion
+import ReactDOM from 'react-dom/client';
+
+const Hello = () => <>
+    <h1>Hello</h1>
+</>
+const Hai = () => <>
+    <h1>Hai</h1>
+</>
+const Greeter = () => <>
+    <h1>Greeter</h1>
+</>
+
+const Welcome = () => {
+    return <div>
+        <Hello />
+        <Hai />
+        <Greeter />
+    </div>
+}
+const App = ()=><Welcome/>
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+
+root.render(<App />)
+.....................................................................................
+			 React Dev tool
+.....................................................................................
+
+It is tool part of browser as plugin, used to insepect the structure of app.
+https://react.dev/learn/react-developer-tools
+
+.....................................................................................
+		  Component Composition and Modularity
+.....................................................................................
+Every Component will go into separate folders and files, through es 6 modules you can import export components..
+
+https://legacy.reactjs.org/docs/faq-structure.html
+
+Is there a recommended way to structure React projects?
+
+React doesn’t have opinions on how you put files into folders. That said there are a few common approaches popular in the ecosystem you may want to consider.
+
+Grouping by features or routes
+
+common/
+  Avatar.js
+  Avatar.css
+  APIUtils.js
+  APIUtils.test.js
+feed/
+  index.js
+  Feed.js
+  Feed.css
+  FeedStory.js
+  FeedStory.test.js
+  FeedAPI.js
+profile/
+  index.js
+  Profile.js
+  ProfileHeader.js
+  ProfileHeader.css
+  ProfileAPI.js
+
+Grouping by file type
+api/
+  APIUtils.js
+  APIUtils.test.js
+  ProfileAPI.js
+  UserAPI.js
+components/
+  Avatar.js
+  Avatar.css
+  Feed.js
+  Feed.css
+  FeedStory.js
+  FeedStory.test.js
+  Profile.js
+  ProfileHeader.js
+  ProfileHeader.css
+
+Component File Naming Convention:
+
+FileName Must start with Capital letter.
+
+Feed.js
+
+File Extension would be ".js or .jsx" - recommended is ".jsx"
+
+src/welcome/Hello.jsx
+const Hello = () => <>
+    <h1>Hello</h1>
+</>
+
+export { Hello }
+
+src/welcome/Hai.jsx
+
+const Hai = () => <>
+    <h1>Hai</h1>
+</>
+
+export { Hai }
+
+
+export { Welcome }
+src/welcome/Greeter.jsx
+
+const Greeter = () => <>
+    <h1>Greeter</h1>
+</>
+
+export { Greeter }
+
+src/welcome/Welcome.jsx
+import { Hello } from "./Hello"
+import { Hai } from "./Hai"
+import { Greeter } from "./Greeter"
+
+const Welcome = () => {
+    return <div>
+        <Hello />
+        <Hai />
+        <Greeter />
+    </div>
+}
+
+src/welcome/index.js
+
+//component compostion
+import ReactDOM from 'react-dom/client';
+import { Welcome } from './welcome/Welcome';
+
+
+
+const App = ()=><Welcome/>
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+
+root.render(<App />)
+...................................................................................
+			Barrel Export
+..................................................................................
+
+src/welcome/
+   Hello.jsx
+   Hai.jsx
+   Welcome.jsx
+
+when you import these files where ever, we have to import 
+
+import { Hello } from "./Hello"
+import { Hai } from "./Hai"
+import { Greeter } from "./Greeter"
+import { Welcome } from './welcome/Welcome';
+
+Barrel export is nothing simplifiying export and import...
+src/welcome/
+   Hello.jsx
+   Hai.jsx
+   Welcome.jsx
+   index.js
+
+src/welcome/index.js
+you have to write reexport code
+import { Hai } from './Hai'
+import { Hello } from './Hello'
+import { Welcome } from './Welcome'
+import { Greeter } from './Greeter'
+
+//re export 
+export { Hai, Hello, Welcome, Greeter }
+
+
+eg:
+
+//component compostion
+import ReactDOM from 'react-dom/client';
+// import { Welcome } from './welcome/Welcome';
+import { Welcome } from './welcome'
+
+const App = () => <Welcome />
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+
+root.render(<App />)
+
+Assigment:
+
+You have to build layout
+
+ -App
+   |
+   RootLayout
+	|
+	Page
+	  |
+	 Header
+	 Main	   
+	   |
+	    Three sections	 
+	 Footer
+
+
+
 
 
 

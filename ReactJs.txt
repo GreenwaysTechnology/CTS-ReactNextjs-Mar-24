@@ -940,7 +940,7 @@ root.render(<Welcome />)
 			  Fragments
 ....................................................................................
 
-Fragements are used to wrap elements in visible way.
+Fragements are used to wrap elements invisible way.
 
 Suppose if i dont want any root element, then we can use Fragement.
 
@@ -1198,6 +1198,352 @@ You have to build layout
 	   |
 	    Three sections	 
 	 Footer
+
+
+Component Name:
+  const user = () => <h1>User Component</h1>
+
+const App = () => (
+    <>
+        <Welcome />
+        <user />
+    </>
+)
+
+Warning: The tag <user> is unrecognized in this browser. If you meant to render a React component, start its name with an uppercase letter.
+    at user
+    at App
+.....................................................................................
+			   Data Binding
+....................................................................................
+
+As of now we have seen only how to create static UI - (only HTML)
+
+How to represent data?
+->primitives - string,numbers,boolean
+->objects - object,arrays
+
+How to bind data?
+  {variable} {expression}
+ 
+  {a} {fun()} {10*2} {isHidden ? 'Show':'Hide'} 
+
+
+Simple Data binding:
+import ReactDOM from 'react-dom/client';
+
+const User = () => {
+    const userName = 'Subramanian Murugan'
+    const mail = 'sasubramanian_md@hotmail.com'
+    const status = false
+    const id = 1
+    const imageSrc='https://i.imgur.com/7vQD0fPs.jpg'
+
+    return <div>
+        <img src={imageSrc} height={50} width={50} />
+        <h1>Id {id}</h1>
+        <p>Name {userName}</p>
+        <p>Mail {mail}</p>
+        <p>Status {status ? 'Available' : 'Not Available'}</p>
+    </div>
+}
+
+const App = () => <>
+    <User />
+</>
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />
+);
+..................................................................................
+			   Data Binding Patterns
+
+1.property binding aka props pattern
+2.State binding aka state pattern.
+
+props Pattern:
+
+When you think about component , you should thing about resuablity..
+
+
+const User = () => {
+    const userName = 'Subramanian Murugan'
+    const mail = 'sasubramanian_md@hotmail.com'
+    const status = false
+    const id = 1
+    const imageSrc='https://i.imgur.com/7vQD0fPs.jpg'
+
+    return <div>
+        <img src={imageSrc} height={50} width={50} />
+        <h1>Id {id}</h1>
+        <p>Name {userName}</p>
+        <p>Mail {mail}</p>
+        <p>Status {status ? 'Available' : 'Not Available'}</p>
+    </div>
+}
+
+User component is not resuable, we cant represent other user information...
+
+How to create resuable component?
+
+ Component must be paramertized or configurable....
+
+You know very well component is function, just js function, when you think about function, you can pass parameter....
+
+eG:
+import ReactDOM from 'react-dom/client';
+
+const User = (userName, mail, status, id, imageSrc) => {
+    return <div>
+        <img src={imageSrc} height={50} width={50} />
+        <h1>Id {id}</h1>
+        <p>Name {userName}</p>
+        <p>Mail {mail}</p>
+        <p>Status {status ? 'Available' : 'Not Available'}</p>
+    </div>
+}
+
+const App = () => {
+    const userName = 'Subramanian Murugan'
+    const mail = 'sasubramanian_md@hotmail.com'
+    const status = false
+    const id = 1
+    const imageSrc = 'https://i.imgur.com/7vQD0fPs.jpg'
+
+    return User(userName, mail, status, id, imageSrc)
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />
+);
+
+
+Here we call function,and passing values as parameter.
+Calling function is imperative style programming, but react recommends to use declarative programming meaning that html like syntax.
+
+
+import ReactDOM from 'react-dom/client';
+
+const User = (props) => {
+    console.log(props)
+    return <div>
+        <img src={props.imageSrc} height={50} width={50} />
+        <h1>Id {props.id}</h1>
+        <p>Name {props.userName}</p>
+        <p>Mail {props.mail}</p>
+        <p>Status {props.status ? 'Available' : 'Not Available'}</p>
+    </div>
+}
+
+const App = () => {
+    const userName = 'Subramanian Murugan'
+    const mail = 'sasubramanian_md@hotmail.com'
+    const status = false
+    const id = 1
+    const imageSrc = 'https://i.imgur.com/7vQD0fPs.jpg'
+
+    return <>
+        <User id={id} mail={mail} userName={userName} status={status} imageSrc={imageSrc} />
+        <User id={2} mail={'murugan@gmail.com'} userName={'murugan'} status={true} imageSrc={imageSrc} />
+        <User id={3} mail={'ram@gmail.com'} userName={'ram'} status={false} imageSrc={imageSrc} />
+        <User id={4} mail={'sweety@hotmail.com'} userName={'Sweety'} status={false} imageSrc={imageSrc} />
+    </>
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />
+);
+
+.................................................................................
+			Component break up and property
+...................................................................................
+import ReactDOM from 'react-dom/client';
+
+export const Avatar = props => <img src={props.imageSrc} height={50} width={50} />
+export const Status = props => <p>Status {props.status ? 'Available' : 'Not Available'}</p>
+
+export const User = (props) => {
+    return <div>
+        <Avatar imageSrc={props.imageSrc} />
+        <h1>Id {props.id}</h1>
+        <p>Name {props.userName}</p>
+        <p>Mail {props.mail}</p>
+        <Status status={props.status} />
+    </div>
+}
+
+export const App = () => {
+    const userName = 'Subramanian Murugan'
+    const mail = 'sasubramanian_md@hotmail.com'
+    const status = false
+    const id = 1
+    const imageSrc = 'https://i.imgur.com/7vQD0fPs.jpg'
+
+    return <>
+        <User id={id} mail={mail} userName={userName} status={status} imageSrc={imageSrc} />
+        <User id={2} mail={'murugan@gmail.com'} userName='murugan' status={true} imageSrc={imageSrc} />
+        <User id={3} mail={'ram@gmail.com'} userName='ram' status={false} imageSrc={imageSrc} />
+        <User id={4} mail={'sweety@hotmail.com'} userName={'Sweety'} status={false} imageSrc={imageSrc} />
+    </>
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />
+);
+...................................................................................
+		    Object Destructuring and Props
+....................................................................................
+import ReactDOM from 'react-dom/client';
+
+export const Avatar = ({ imageSrc }) => <img src={imageSrc} height={50} width={50} />
+export const Status = ({ status }) => <p>Status {status ? 'Available' : 'Not Available'}</p>
+
+export const User = (props) => {
+    //introduce object destrucing 
+    const { id, userName, status, mail, imageSrc } = props
+    return <div>
+        <Avatar imageSrc={imageSrc} />
+        <h1>Id {id}</h1>
+        <p>Name {userName}</p>
+        <p>Mail {mail}</p>
+        <Status status={status} />
+    </div>
+}
+
+export const App = () => {
+    const userName = 'Subramanian Murugan'
+    const mail = 'sasubramanian_md@hotmail.com'
+    const status = false
+    const id = 1
+    const imageSrc = 'https://i.imgur.com/7vQD0fPs.jpg'
+
+    return <>
+        <User id={id} mail={mail} userName={userName} status={status} imageSrc={imageSrc} />
+        <User id={2} mail={'murugan@gmail.com'} userName='murugan' status={true} imageSrc={imageSrc} />
+        <User id={3} mail={'ram@gmail.com'} userName='ram' status={false} imageSrc={imageSrc} />
+        <User id={4} mail={'sweety@hotmail.com'} userName={'Sweety'} status={false} imageSrc={imageSrc} />
+    </>
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />
+);
+
+..................................................................................
+			 Property Rethrow
+.................................................................................
+
+Before property Rethrow:
+
+export const User = (props) => {
+    return <UserDetails
+        id={props.id}
+        userName={props.userName}
+        status={props.status}
+        mail={props.mail}
+        imageSrc={props.imageSrc}
+    />
+}
+Here component passes every data down to its children, these more complex, react provides short cut using spread operator..
+
+import ReactDOM from 'react-dom/client';
+
+export const Avatar = ({ imageSrc }) => <img src={imageSrc} height={50} width={50} />
+export const Status = ({ status }) => <p>Status {status ? 'Available' : 'Not Available'}</p>
+
+export const User = (props) => {
+    // return <UserDetails
+    //     id={props.id}
+    //     userName={props.userName}
+    //     status={props.status}
+    //     mail={props.mail}
+    //     imageSrc={props.imageSrc}
+    // />
+    return <UserDetails {...props} extra={{ address: 'Banaglore' }} />
+}
+export const UserDetails = props => {
+    //introduce object destrucing 
+    const { id, userName, status, mail, imageSrc, extra } = props
+    return <div>
+        <Avatar imageSrc={imageSrc} />
+        <h1>Id {id}</h1>
+        <p>Name {userName} -  extra</p>
+        <p>Mail {mail}</p>
+        <p>{extra.address}</p>
+        <Status status={status} />
+    </div>
+}
+
+export const App = () => {
+    const userName = 'Subramanian Murugan'
+    const mail = 'sasubramanian_md@hotmail.com'
+    const status = false
+    const id = 1
+    const imageSrc = 'https://i.imgur.com/7vQD0fPs.jpg'
+
+    return <>
+        <User id={id} mail={mail} userName={userName} status={status} imageSrc={imageSrc} />
+        <User id={2} mail={'murugan@gmail.com'} userName='murugan' status={true} imageSrc={imageSrc} />
+        <User id={3} mail={'ram@gmail.com'} userName='ram' status={false} imageSrc={imageSrc} />
+        <User id={4} mail={'sweety@hotmail.com'} userName={'Sweety'} status={false} imageSrc={imageSrc} />
+    </>
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />
+);
+
+Assigment:
+.........
+You have to build Grid Component
+
+GridComponent
+   |
+   Column
+     |
+     x y z
+   Row
+    Row of data
+
+You must apply props pattern,Fragements...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

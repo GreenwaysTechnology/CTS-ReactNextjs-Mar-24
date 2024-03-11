@@ -1,32 +1,23 @@
 import ReactDOM from 'react-dom/client';
 
-export const Avatar = ({ imageSrc }) => <img src={imageSrc} height={50} width={50} />
-export const Status = ({ status }) => <p>Status {status ? 'Available' : 'Not Available'}</p>
-
-export const User = (props) => {
-    // return <UserDetails
-    //     id={props.id}
-    //     userName={props.userName}
-    //     status={props.status}
-    //     mail={props.mail}
-    //     imageSrc={props.imageSrc}
-    // />
-    return <UserDetails {...props} extra={{ address: 'Banaglore' }} />
-}
-export const UserDetails = props => {
-    //introduce object destrucing 
-    const { id, userName, status, mail, imageSrc, extra } = props
+const User = (props) => {
     return <div>
-        <Avatar imageSrc={imageSrc} />
-        <h1>Id {id}</h1>
-        <p>Name {userName} -  extra</p>
-        <p>Mail {mail}</p>
-        <p>{extra.address}</p>
-        <Status status={status} />
+        <img src={props.imageSrc} alt='No Image' height={50} width={50} />
+        <h1>Id {props.id}</h1>
+        <p>Name {props.userName}</p>
+        <p>Mail {props.mail}</p>
+        <p>Status {props.status ? 'Available' : 'Not Available'}</p>
     </div>
 }
+//default Props
+User.defaultProps = {
+    id: 0,
+    userName: 'User Name',
+    mail: 'Mail',
+    status: false
+}
 
-export const App = () => {
+const App = () => {
     const userName = 'Subramanian Murugan'
     const mail = 'sasubramanian_md@hotmail.com'
     const status = false
@@ -34,9 +25,10 @@ export const App = () => {
     const imageSrc = 'https://i.imgur.com/7vQD0fPs.jpg'
 
     return <>
+        <User />
         <User id={id} mail={mail} userName={userName} status={status} imageSrc={imageSrc} />
-        <User id={2} mail={'murugan@gmail.com'} userName='murugan' status={true} imageSrc={imageSrc} />
-        <User id={3} mail={'ram@gmail.com'} userName='ram' status={false} imageSrc={imageSrc} />
+        <User id={2} mail={'murugan@gmail.com'} userName={'murugan'} status={true} imageSrc={imageSrc} />
+        <User id={3} mail={'ram@gmail.com'} userName={'ram'} status={false} imageSrc={imageSrc} />
         <User id={4} mail={'sweety@hotmail.com'} userName={'Sweety'} status={false} imageSrc={imageSrc} />
     </>
 }

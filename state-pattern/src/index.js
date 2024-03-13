@@ -1,23 +1,35 @@
-//pure function Rule B
+import React from 'react';
+import ReactDOM from 'react-dom/client';
 
-function updateProfile(city, profile) {
-    // //return new object
-    // return {
-    //     name: profile.name,
-    //     city: city
-    // }
-    //Object.assign 
-    //return Object.assign({}, profile, { city: city })
-    //return { ...profile, city: city }
-    return { ...profile, city }
+class HouseRating extends React.Component {
+
+    state = {
+        house: {
+            name: 'RavenClaw',
+            points: 10
+        }
+    }
+
+    render() {
+        return <div>
+            <h1>House Rating Component</h1>
+            <h1>House Name {this.state.house.name}</h1>
+            <h5>Points : {this.state.house.points}</h5>
+            <button>😁</button>
+      
+
+        </div>
+    }
 }
 
-let profile = {
-    name: 'Subramanian',
-    city: 'Coimbatore'
+
+const App = () => {
+    return <>
+        <HouseRating />
+    </>
 }
 
-console.log('before update', profile)
-const result = updateProfile('Chennai', profile)
-console.log(profile === result ? "Same Object" : "Different Object")
-console.log('after update', result)
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />
+);

@@ -2720,29 +2720,328 @@ state = {
 }
 
 How to update mobileNo - 834343434
+.....................................................................................
+			 Complxity of Immutable Objects 
+				 and 
+			    How to solve  them
+				immer.js
+.....................................................................................
+What is immer?
+  immer is simple js lib, which helps to write complex immutable code in "mutable way" like regular javascript way.
+
+immutable syntax to update object property:
+
+
+    state = {
+        house: {
+            name: 'RavenClaw',
+            points: 10
+        }
+    }
+
+
+ 	return {
+                ...prevState, //level -0 copy
+                house: {
+                    ...prevState.house, // level-1 copy
+                    points: prevState.house.points + 2
+                }
+        }
+
+js syntax:
+
+    state = {
+        house: {
+            name: 'RavenClaw',
+            points: 10
+        }
+    }
+
+update state:
+
+state.house.points +=2
+
+immer is lib which takes care of writing mutable code on behalf of us, developer writes mutable code, immer converts into immutable code.
+
+Immer core concept:
+
+immer provides a function called "produce"
+
+produce(state,(draft)=>{
+  draft.house.points +=2
+})
+
+Getting started:
+
+steps:
+1.install immer lib
+npm i immer
+
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { produce } from 'immer';
+
+class HouseRating extends React.Component {
+
+    state = {
+        house: {
+            name: 'RavenClaw',
+            points: 10
+        }
+    }
+
+    onIncreasePointByTwo = () => {
+        this.setState((prevState) => {
+            return produce(prevState, (draft) => {
+                draft.house.points += 2
+            })
+        })
+    }
+
+    render() {
+        return <div>
+            <h1>House Rating Component</h1>
+            <h1>House Name {this.state.house.name}</h1>
+            <h5>Points : {this.state.house.points}</h5>
+            <button onClick={this.onIncreasePointByTwo}>😁</button>
+
+
+        </div>
+    }
+}
+
+
+const App = () => {
+    return <>
+        <HouseRating />
+    </>
+}
+
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />
+);
+....................................................................................
+			Dynamic props
+		       (State as Prop)
+
+
+As of now, we have seen how to have state,biz logic, user interface inside single component, which is not recommended pratice.
+
+we have to isloate state and biz logic, user interface into separate components.
+
+According to this idea, components can be classified into two category
+
+1.Container Component
+   Component having state + biz logic
+2.Presentational Component
+   Component having UI 
+
+How to pass data(state) from parent to child?
+  As a prop, dynamic prop...
+
+import { produce } from 'immer';
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+
+
+//Container Component
+class Review extends React.Component {
+    //state declaration
+    state = {
+        like: 10
+    }
+    onLike = () => {
+        this.setState(previousState => {
+            return produce(previousState, (draft) => {
+                draft.like += 1
+            })
+        })
+    }
+    render() {
+        console.log('current state', this.state)
+        return <div>
+            {/* State as prop and listener as prop */}
+            {/* <ReviewDisplay like={this.state.like} onLike={this.onLike} /> */}
+            <ReviewDisplay  {...this.state} onLike={this.onLike} />
+
+        </div>
+    }
+}
+
+//Re
+const ReviewDisplay = props => {
+    return <>
+        <h1>Review Component</h1>
+        <h5>Like {props.like}</h5>
+        <button onClick={props.onLike}>😁</button>
+    </>
+}
+
+
+const App = () => {
+    return <>
+        <Review></Review>
+    </>
+}
+
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />
+);
+
+import { produce } from 'immer';
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+
+
+//Container Component
+class Review extends React.Component {
+    //state declaration
+    state = {
+        like: 10
+    }
+    onLike = () => {
+        this.setState(previousState => {
+            return produce(previousState, (draft) => {
+                draft.like += 1
+            })
+        })
+    }
+    render() {
+        console.log('current state', this.state)
+        return <div>
+            {/* State as prop and listener as prop */}
+            {/* <ReviewDisplay like={this.state.like} onLike={this.onLike} /> */}
+            <ReviewDisplay  {...this} onLike={this.onLike} />
+
+        </div>
+    }
+}
+
+//Re
+const ReviewDisplay = props => {
+    return <>
+        <h1>Review Component</h1>
+        <h5>Like {props.like}</h5>
+        <button onClick={props.onLike}>😁</button>
+    </>
+}
+
+
+const App = () => {
+    return <>
+        <Review></Review>
+    </>
+}
+
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />
+);
+.....................................................................................
+			 Component Life cycles
+.....................................................................................
+
+React Component life cycle can be classified into three major phases
+
+1.Mount
+
+2.Update
+
+3.UnMount
+
+1.Mount :
+  Incase of class component
+
+ 1.constructor
+      Called only once in the component initalization
+     constructors are not used very much...
+ 2.render
+    Called for creating object tree-component tree-Virtual DOM
+
+ 3.componentDidMount
+    Called after render method, once the dom is ready- once ui is completed loaded
+    This method is used heavily  used in react all versions
+   It is used to inital data fetching from the apis
+   It is used to write any async task
+   It is used to write websocket connections
+
+
+2.Update
+    When user starts interacting
+   when state is mutated  -setState,forceUpdate
+   when new props are supplied -state as prop
+  
+   render
+      method is called after state mutation, in order to update ui with new state/
+   during render call,it creates vdom, apply an algorthim called "diff", to compute    old tree and new tree, update dom accordingly.
+  
+   componentDidUpdate
+     It is method which is called after render is completed in update cycle.
+    incase if you want fetch data from api after dom updates
+    incase if you want to any async tasks.
+    
+3.UnMount
+  When component is removed from memory
+ ComponentWillunMount
+   any resource clean up task...
+
+import { produce } from 'immer';
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+
+
+class Counter extends React.Component {
+    state = {
+        value: 0
+    }
+    constructor() {
+        super()
+        console.log('constrcutor is called')
+    }
+    //render
+    render() {
+        console.log('render is called')
+        return <>
+            <h1>Counter {this.state.value} </h1>
+            <button onClick={() => {
+                this.setState(previousState => produce(previousState, (draft) => {
+                    draft.value += 1
+                }))
+            }}>+</button>
+        </>
+    }
+    componentDidMount() {
+        console.log('ComponentDidMount')
+    }
+    componentDidUpdate() {
+        console.log('ComponentDidUpdate')
+    }
+}
 
 
 
+const App = () => {
+    return <>
+        <Counter></Counter>
+    </>
+}
 
 
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />
+);
+...................................................................................
+			Component Lifes and API Call
+...................................................................................
 
+In order to talk to REST API, react has no any opinion regarding which ajax libs should be used
 
+Popular ajax libs used inside react
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+1.fetch
+2.axios
 
 
 

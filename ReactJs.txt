@@ -3277,10 +3277,235 @@ root.render(<App />);
 
 Assigment:
  Convert existing houseRating component into hooks powered component.
+.....................................................................................
+			 Life Cycle callbacks and hooks
+.....................................................................................
+
+comonentDidMount,componentDidupdate,componentWillUnMount
+    =>useEffect
 
 
+componentDidMount
+
+import { produce } from 'immer';
+import React, { useEffect, useState } from 'react';
+import ReactDOM from 'react-dom/client';
+
+const Review = () => {
+    const [like, setLike] = useState(0)
+
+    //Life cycle methods
+    useEffect(() => {
+        //you can write any async code 
+        setTimeout(() => {
+            setLike(like + 10)
+        }, 5000)
+    }, [])
+
+    return <div>
+        <h1>Like {like}</h1>
+        <button onClick={() => {
+            setLike(like + 1)
+        }}>+</button>
+    </div>
+}
+
+const App = () => {
+    return <>
+        <Review />
+    </>
+}
 
 
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);
+
+componentDidUpdate:
+...................
+import { produce } from 'immer';
+import React, { useEffect, useState } from 'react';
+import ReactDOM from 'react-dom/client';
+
+const Review = () => {
+    const [like, setLike] = useState(0)
+    const [initialRender, setInitalRender] = useState(true);
+
+    //Life cycle methods
+    useEffect(() => {
+        if (initialRender) {
+            setInitalRender(false)
+        } else {
+            console.log('update')
+        }
+    }, [like])
+
+    return <div>
+        <h1>Like {like}</h1>
+        <button onClick={() => {
+            setLike(like + 1)
+        }}>+</button>
+    </div>
+}
+
+const App = () => {
+    return <>
+        <Review />
+    </>
+}
+
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);
+
+.............
+componentwillUnMount:
+
+import { produce } from 'immer';
+import React, { useEffect, useState } from 'react';
+import ReactDOM from 'react-dom/client';
+
+const Review = () => {
+    const [like, setLike] = useState(0)
+    const [initialRender, setInitalRender] = useState(true);
+
+    //Life cycle methods
+    useEffect(() => {
+        if (initialRender) {
+            setInitalRender(false)
+        } else {
+            console.log('update')
+        }
+
+        return () => {
+            //componentwillUnMount will go
+            
+        }
+
+    }, [like])
+
+    return <div>
+        <h1>Like {like}</h1>
+        <button onClick={() => {
+            setLike(like + 1)
+        }}>+</button>
+    </div>
+}
+
+const App = () => {
+    return <>
+        <Review />
+    </>
+}
+
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);
+....................................................................................
+			 API Calls in useEffect
+....................................................................................
+import { produce } from 'immer';
+import React, { useEffect, useState } from 'react';
+import ReactDOM from 'react-dom/client';
+
+const Posts = () => {
+    const [post, setPost] = useState({
+        posts: [], //data
+        error: null,
+        isLoading: false
+    })
+    async function fetchPosts() {
+        const url = 'https://jsonplaceholder.typicode.com/posts'
+        try {
+            const response = await fetch(url)
+            const posts = await response.json()
+            console.log(posts)
+            setPost(previousState => {
+                return produce(previousState, draft => {
+                    draft.posts = posts
+                    draft.isLoading = true
+                    draft.error = previousState.error
+                })
+            })
+        }
+        catch (err) {
+            setPost(previousState => {
+                return produce(previousState, draft => {
+                    draft.error = err
+                })
+            })
+        }
+    }
+
+    useEffect(() => {
+        fetchPosts()
+    }, [])
+
+    if (post.error) {
+        return <div style={{ marginLeft: 50 }}>
+            <h1>Error : {post.error.message}</h1>
+        </div>
+    } else if (!post.isLoading) {
+        return <h1 style={{ textAlign: 'center' }}>🛴</h1>
+    } else {
+        return <div style={{ marginLeft: 50 }}>
+            <h1>Posts</h1>
+            <hr />
+            <ul>
+                {post.posts.map(post => {
+                    return <li>{post.title}</li>
+                })}
+            </ul>
+        </div>
+
+    }
+}
+
+const App = () => {
+    return <>
+        <Posts />
+    </>
+}
+
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);
+....................................................................................
+			  Input from the user
+....................................................................................
+import React, { useState } from 'react';
+import ReactDOM from 'react-dom/client';
+
+
+const MyInput = props => {
+    const [text, setText] = useState('Subramaian')
+    const [liked, setLiked] = useState(true)
+
+    const handleChange = (evt) => {
+        setText(evt.target.value)
+    }
+    return <>
+        <input value={text} onChange={handleChange} />
+        <h1>Your Name : {text}</h1>
+        <div>
+            <input type="checkbox" checked={liked} onChange={(e) => {
+                setLiked(e.target.checked)
+            }} />
+            Do you like
+            <p>you {liked ? 'liked this' : ' did not like this'}</p>
+        </div>
+    </>
+}
+
+
+const App = () => {
+    return <>
+        <MyInput />
+    </>
+}
+
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);
 
 
 

@@ -3506,6 +3506,155 @@ const App = () => {
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(<App />);
+.....................................................................................
+			 Custom Hooks
+.....................................................................................
+
+Why Custom Hooks?
+
+ if you want to create resuable functions to be used across your application/team/company.
+
+
+Use Case: Calculating window width
+
+import { useEffect, useState } from 'react';
+import ReactDOM from 'react-dom/client';
+
+
+const Frame = props => {
+
+    const [width, setWidth] = useState(window.innerWidth)
+
+    useEffect(() => {
+        const handleResize = () => setWidth(window.innerWidth)
+        //window listner:
+        window.addEventListener('resize', handleResize)
+        //unMount
+        return () => {
+            window.removeEventListener('resize', handleResize)
+        }
+
+    })
+
+    return <>
+        <h1>Frame</h1>
+        <h1>Width: {width}</h1>
+    </>
+}
+
+
+const Panel = props => {
+
+    const [width, setWidth] = useState(window.innerWidth)
+
+    useEffect(() => {
+        const handleResize = () => setWidth(window.innerWidth)
+        //window listner:
+        window.addEventListener('resize', handleResize)
+        //unMount
+        return () => {
+            window.removeEventListener('resize', handleResize)
+        }
+
+    })
+
+    return <>
+        <h1>Panel</h1>
+        <h1>Width: {width}</h1>
+    </>
+}
+
+
+const App = () => {
+    return <>
+        <Panel />
+        <hr></hr>
+        <Frame/>
+    </>
+}
+
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);
+
+Now calculating Window width is available in  Panel comompoent and also in side Framework, code is duplicated...
+
+
+Having features does not belong to within component, we have to move out of component.
+
+1.Feature
+    screenSize
+
+src/hooks/useWindowWidth.js
+import { useEffect, useState } from 'react';
+
+//Every hooks is just js function.
+
+function useWindowWidth() {
+    const [width, setWidth] = useState(window.innerWidth)
+    useEffect(() => {
+        const handleResize = () => setWidth(window.innerWidth)
+        //window listner:
+        window.addEventListener('resize', handleResize)
+        //unMount
+        return () => {
+            window.removeEventListener('resize', handleResize)
+        }
+
+    })
+    return width;
+
+}
+export { useWindowWidth }
+
+src/index.js
+
+import { useEffect, useState } from 'react';
+import ReactDOM from 'react-dom/client';
+import { useWindowWidth } from './hooks/useWindowWidth';
+
+const Frame = props => {
+    const width = useWindowWidth()
+    return <>
+        <h1>Frame</h1>
+        <h1>Width: {width}</h1>
+    </>
+}
+
+
+const Panel = props => {
+    const width = useWindowWidth()
+
+    return <>
+        <h1>Panel</h1>
+        <h1>Width: {width}</h1>
+    </>
+}
+
+
+const App = () => {
+    return <>
+        <Panel />
+        <hr></hr>
+        <Frame />
+    </>
+}
+
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);
+
+.....................................................................................
+Task:
+ To fetch data from api, instead of writing fetch code inside component, why cant  i have common hook, which should return object {data,error,isLoading}
+
+const {data,error,isLoading} = useFetch('url')
+
+
+
+
+
+
 
 
 

@@ -1,31 +1,31 @@
-import React, { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom/client';
+import { useWindowWidth } from './hooks/useWindowWidth';
 
-
-const MyInput = props => {
-    const [text, setText] = useState('Subramaian')
-    const [liked, setLiked] = useState(true)
-
-    const handleChange = (evt) => {
-        setText(evt.target.value)
-    }
+const Frame = props => {
+    const width = useWindowWidth()
     return <>
-        <input value={text} onChange={handleChange} />
-        <h1>Your Name : {text}</h1>
-        <div>
-            <input type="checkbox" checked={liked} onChange={(e) => {
-                setLiked(e.target.checked)
-            }} />
-            Do you like
-            <p>you {liked ? 'liked this' : ' did not like this'}</p>
-        </div>
+        <h1>Frame</h1>
+        <h1>Width: {width}</h1>
+    </>
+}
+
+
+const Panel = props => {
+    const width = useWindowWidth()
+
+    return <>
+        <h1>Panel</h1>
+        <h1>Width: {width}</h1>
     </>
 }
 
 
 const App = () => {
     return <>
-        <MyInput />
+        <Panel />
+        <hr></hr>
+        <Frame />
     </>
 }
 

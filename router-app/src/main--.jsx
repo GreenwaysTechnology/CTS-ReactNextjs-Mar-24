@@ -21,8 +21,8 @@ const routes = [
                 element: <Services />
             },
             {
-                path: '/todos',
-                element: <TodoMaster />
+              path:'todos',
+              element:<TodoMaster/>
             },
             {
                 path: '/todosdetails/:id',

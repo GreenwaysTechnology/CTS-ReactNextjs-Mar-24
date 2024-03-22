@@ -10,6 +10,9 @@ export default function Home() {
                 <li>
                     <Link to={`services`}>Contact</Link>
                 </li>
+                <li>
+                    <Link to={`todos`}>Todos</Link>
+                </li>
             </ul>
         </nav>
         <hr />

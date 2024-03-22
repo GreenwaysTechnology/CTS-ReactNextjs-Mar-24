@@ -5,7 +5,6 @@ import Home from './routes/home'
 import Contact from './components/Contact'
 import Services from './components/Services'
 import Todos from './components/Todos'
-import TodoMaster from './components/TodoMaster'
 
 const routes = [
     {
@@ -21,11 +20,7 @@ const routes = [
                 element: <Services />
             },
             {
-                path: '/todos',
-                element: <TodoMaster />
-            },
-            {
-                path: '/todosdetails/:id',
+                path: '/todos/:id',
                 element: <Todos />
             }
         ]

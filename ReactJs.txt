@@ -4019,6 +4019,8 @@ export default function Home() {
         </section>
     </div>
 }
+/users/:id
+
 ....................................................................................
 			  Reading Route Params
 ....................................................................................
@@ -4070,3 +4072,322 @@ export default function Todos() {
         <h1>Todos {params.id}</h1>
     </div>
 }
+....................................................................................
+			Master -Details
+....................................................................................
+
+import { Link } from "react-router-dom"
+
+const todos = [
+    {
+        userId: 1,
+        id: 1,
+        title: "delectus aut autem",
+        completed: false
+    },
+    {
+        userId: 1,
+        id: 2,
+        title: "quis ut nam facilis et officia qui",
+        completed: false
+    },
+    {
+        userId: 1,
+        id: 3,
+        title: "fugiat veniam minus",
+        completed: false
+    },
+    {
+        userId: 1,
+        id: 4,
+        title: "et porro tempora",
+        completed: true
+    },
+    {
+        userId: 1,
+        id: 5,
+        title: "laboriosam mollitia et enim quasi adipisci quia provident illum",
+        completed: false
+    },
+    {
+        userId: 1,
+        id: 6,
+        title: "qui ullam ratione quibusdam voluptatem quia omnis",
+        completed: false
+    },
+]
+export default function TodoMaster() {
+    return <div>
+        <h1>TodoMaster</h1>
+        <ul>
+            {
+                todos.map(todo => {
+                    return <li>
+                        <Link to={`/todosdetails/${todo.id}`}>{todo.title}</Link>
+                    </li>
+                })
+            }
+        </ul>
+    </div>
+}
+import { useParams } from "react-router-dom"
+
+export default function Todos() {
+    const params = useParams()
+    return <div>
+        <h1>Todos {params.id}</h1>
+    </div>
+}
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import { RouterProvider, createBrowserRouter } from 'react-router-dom'
+import Home from './routes/home'
+import Contact from './components/Contact'
+import Services from './components/Services'
+import Todos from './components/Todos'
+import TodoMaster from './components/TodoMaster'
+
+const routes = [
+    {
+        path: '/',
+        element: <Home />,
+        children: [
+            {
+                path: '/contact',
+                element: <Contact />
+            },
+            {
+                path: '/services',
+                element: <Services />
+            },
+            {
+              path:'todos',
+              element:<TodoMaster/>
+            },
+            {
+                path: '/todosdetails/:id',
+                element: <Todos />
+            }
+        ]
+    }
+]
+
+//route Configuration
+const router = createBrowserRouter(routes)
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+    <React.StrictMode>
+        <RouterProvider router={router} />
+    </React.StrictMode>,
+)
+.....................................................................................
+			 Redux -State Management
+.....................................................................................
+
+What is state?
+ State is nothing data.
+
+State is managed within component.
+
+What if i want to share the state across the application,there is pattern called "Lift up the state", pass as prop.
+
+In state management , redux is going to act as state layer, react is going act as UI layer.
+
+React and Redux is based on the design pattern "Flux Pattern"
+
+
+https://facebookarchive.github.io/flux/
+
+
+Action---->dispatcher----->Store<--->[Reducer] 
+			    |
+			    |
+			 View-React
+
+
+What is Redux -  Red-reducer + ux (Flux) => Reducer + Flux
+
+What is Reducer?
+  Reducer is pure function, which accepts input, returns immutable object...
+  Reducer is having biz logic.
+  Who calls reducer, reducer is called by store..
+  UI Layer never communicates biz logic (reducer) directly.
+  UI Layer sends request(action) --via dispatcher---to the store, then store reacts   to that
+
+Core Concepts or Principles:
+............................
+
+1.State:
+   Redux maintains or stores the data in "single object"Redux is going to store all 
+component state into one single object -Application State
+
+const appState = {
+  ....   
+} called as application state.
+
+How appState is identified for each compoent?
+
+ Based on category/module.
+
+const appState = {
+  
+  order: {
+    
+  },
+  customer: {},
+  product:{}
+
+} 
+2.Store
+   Store is object where Redux application state lives.
+   Store offers api to communicate from react and redux to react
+   Store is entry and exit point of react and redux
+   Per application , there is single store, that store is having state..
+
+3.reducer
+    You know very well how to mutate and where mutate state in react
+     ->Inside setState pure function.
+    Reducer is pure function which returns immutable object.
+
+4.actions
+    An action is like request in webserver, redux actions are plain javascript object
+ eg:
+  let counterAction = {
+	type:'counter/increment'
+  }
+ action may take input also called payload
+  let counterByAmount = {
+   type:'counter/increment',
+   payload:12
+ }
+5.Dispatcher 
+  It is transporter which transport action object from react to redux
+  Dispatcher is represented by a method called "dispatch"
+  dispatch is part of "Store object"
+  store.dispatch(action)
+
+....................................................................................
+..................................................................................					Building Redux
+...................................................................................
+
+in order to start redux we have two patterns
+
+1.old redux  - redux.js -https://redux.js.org/
+2.new redux called "Redux toolkit" -https://redux-toolkit.js.org/
+
+
+We are going to use "Redux toolkit"
+
+There are two ways create app:
+
+1.create react only, and update redux
+
+Using Vite:
+npm create vite router-app  --template react
+npm install @reduxjs/toolkit  react-redux
+
+Using create-react-app
+npx create-react-app myapp
+npm install @reduxjs/toolkit  react-redux
+
+2.create react-redux app one short
+
+Using vite
+
+npx degit reduxjs/redux-templates/packages/vite-template-redux my-app
+
+Using create-react-app
+
+npx create-react-app myreduxapp --template redux
+.....................................................................................
+
+Level-0 :State inside component.
+
+import React, {useState} from 'react'
+import ReactDOM from 'react-dom/client'
+
+const Review = ()=> {
+  const [like, setLike] = useState(0)
+ 
+  return <>
+    <h1>Like {like}</h1>
+    <button onClick={() => {
+            setLike(like + 1)
+        }}>+</button>
+  </>
+}
+
+const App = () => <div>
+     <Review/>
+</div>
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
+)
+...................................................................................
+Level:1 : Moving State , Mutation into redux
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import { configureStore } from '@reduxjs/toolkit'
+import { Provider, useDispatch, useSelector } from 'react-redux'
+
+
+//reducer
+const ReviewReducer = (like = 10, action) => {
+    //biz
+    switch (action.type) {
+        case 'review/like':
+            return like + 1
+        default:
+            return like //default state/inital state
+    }
+}
+
+//create Store Object
+
+const store = configureStore({
+    reducer: {
+        review: ReviewReducer
+    }
+})
+
+///////////////////////////////////////////////////////
+const Review = () => {
+
+    //hook to get redux state
+    const like = useSelector(state => {
+        //appstate.reducerName
+        return state.review
+    })
+    const dispatch = useDispatch()
+
+    const onLike = () => {
+        //send action via dispatcher
+        dispatch({
+            type: 'review/like'
+        })
+    }
+
+    return <>
+        <h1>Like {like}</h1>
+        <button onClick={onLike}>+</button>
+    </>
+}
+
+const App = () => <div>
+    <Review />
+</div>
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+    <Provider store={store}>
+        <React.StrictMode>
+            <App />
+        </React.StrictMode>
+    </Provider>
+
+)
+
+
+

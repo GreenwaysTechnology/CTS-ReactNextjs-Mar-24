@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { configureStore, createSlice } from '@reduxjs/toolkit'
 import { Provider, useDispatch, useSelector } from 'react-redux'
-import logger from 'redux-logger'
+
 
 //declare intial State:
 const initialState = {
@@ -34,8 +34,7 @@ const { increment, decrement, incrementByAmount } = counterSlice.actions
 const store = configureStore({
     reducer: {
         counter: counterReduer
-    },
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger)
+    }
 })
 
 ///////////////////////////////////////////////////////

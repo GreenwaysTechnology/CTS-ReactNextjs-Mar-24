@@ -5034,7 +5034,423 @@ ReactDOM.createRoot(document.getElementById('root')).render(
 ....................................................................................
 			Map Object Notation Pattern
 ....................................................................................
+//Map object notation
+const ReviewReducer = createReducer(initalState, {
+    'review/like': (state, action) => {
+        state.value++
+    }
+})
 
+Note: In the latest version, This pattern has been deprecated...
+.....................................................................................				Actions - createAction
+....................................................................................
+
+const like ='review/like' - Action constant
+
+Action creator:
+ It is function which returns action object
+
+function increment(payload){
+   return {
+      type:like,
+      payload:payload
+   }
+}
+
+const action = increment(2)  ==>{type:'review/like',payload:2}
+
+Without createAction function: using action constant and action creator function.
+
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import { configureStore, createReducer } from '@reduxjs/toolkit'
+import { Provider, useDispatch, useSelector } from 'react-redux'
+
+
+
+//action constant
+function increment(payload){
+    return {
+        type:'like/review',
+        payload:payload
+    }
+}
+
+const likeAction  = increment(2)
+
+
+//reducer
+const initalState = {
+    value: 10
+}
+
+
+
+const ReviewReducer = createReducer(initalState, builder => {
+    builder.addCase(likeAction.type, (state, action) => {
+        //immerjs code
+        state.value++
+    }).addCase('review/dislike', (state, action) => {
+        state.value--
+    }).addDefaultCase((state, action) => { })
+})
+
+//create Store Object
+
+const store = configureStore({
+    reducer: {
+        review: ReviewReducer
+    }
+})
+
+///////////////////////////////////////////////////////
+const Review = () => {
+
+    //hook to get redux state
+    const like = useSelector(state => {
+        //appstate.reducerName
+        return state.review.value
+    })
+
+    const dispatch = useDispatch()
+
+    const onLike = () => {
+        //send action via dispatcher
+        dispatch({
+            type: likeAction.type
+        })
+    }
+
+    return <>
+        <h1>Value {like}</h1>
+        <button onClick={onLike}>+</button>
+        <button onClick={() => {
+            dispatch({ type: 'review/dislike' })
+        }}>-</button>
+
+    </>
+}
+
+const App = () => <div>
+    <Review />
+</div>
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+    <Provider store={store}>
+        <React.StrictMode>
+            <App />
+        </React.StrictMode>
+    </Provider>
+
+)
+.........................................................................
+
+Using action creator:
+.....................
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import { configureStore, createAction, createReducer } from '@reduxjs/toolkit'
+import { Provider, useDispatch, useSelector } from 'react-redux'
+
+const increment = createAction('review/like')
+const decrement = createAction('review/dislike')
+const incrementBy = createAction('review/likeBy')
+
+console.log(increment(2))
+//reducer
+const initalState = {
+    value: 10
+}
+
+
+
+const ReviewReducer = createReducer(initalState, builder => {
+    builder.addCase(increment, (state, action) => {
+        //immerjs code
+        state.value++
+    }).addCase(decrement, (state, action) => {
+        state.value--
+    }).addCase(incrementBy, (state, action) => {
+        state.value += action.payload
+    }).addDefaultCase((state, action) => { })
+})
+
+//create Store Object
+
+const store = configureStore({
+    reducer: {
+        review: ReviewReducer
+    }
+})
+
+///////////////////////////////////////////////////////
+const Review = () => {
+
+    //hook to get redux state
+    const like = useSelector(state => {
+        //appstate.reducerName
+        return state.review.value
+    })
+
+    const dispatch = useDispatch()
+
+    const onLike = () => {
+        //send action via dispatcher
+        dispatch({
+            type: 'review/like'
+        })
+    }
+
+    return <>
+        <h1>Value {like}</h1>
+        <button onClick={onLike}>+</button>
+        <button onClick={() => {
+            dispatch({ type: 'review/dislike' })
+        }}>-</button>
+        <button onClick={() => {
+            dispatch({ type: 'review/likeBy', payload: 2 })
+        }}>LikeBy</button>
+
+    </>
+}
+
+const App = () => <div>
+    <Review />
+</div>
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+    <Provider store={store}>
+        <React.StrictMode>
+            <App />
+        </React.StrictMode>
+    </Provider>
+
+)
+...................................................................................
+			 createSlice
+		   (actions,reducers,we dont need to create-automation)
+.....................................................................................
+
+It uses internally createAction,createRedurcer,immer js code, every thing in one place.
+
+createSlice api is standard apporach to write redux logic.
+
+Syntax:
+
+const slice = createSlice({})
+
+parameters:
+initalState
+name
+reducers
+extraReducers
+reducerPath
+selectors
+
+Return Value:
+selectors
+
+
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import { configureStore, createSlice } from '@reduxjs/toolkit'
+import { Provider, useDispatch, useSelector } from 'react-redux'
+
+
+//declare intial State:
+const initialState = {
+    value: 10
+}
+//create Slice
+const counterSlice = createSlice({
+    name: 'counter',
+    initialState,
+    reducers: {
+        //apis
+        increment(state) {
+            state.value++
+        },
+        decrement(state) {
+            state.value--
+        },
+        incrementByAmount(state, action) {
+            state.value += action.payload
+        }
+    }
+})
+//we have to extract reducers,actions from the slice
+
+const counterReduer = counterSlice.reducer
+const { increment, decrement, incrementByAmount } = counterSlice.actions
+
+
+const store = configureStore({
+    reducer: {
+        counter: counterReduer
+    }
+})
+
+///////////////////////////////////////////////////////
+const Counter = () => {
+    //hook to get redux state
+    const value = useSelector(state => {
+        return state.counter.value
+    })
+
+    const dispatch = useDispatch()
+
+    const onIncrement = () => {
+        //send action via dispatcher
+        dispatch({
+            type: increment
+        })
+    }
+
+    return <>
+        <h1>Counter {value}</h1>
+        <button onClick={onIncrement}>+</button>
+    </>
+}
+
+const App = () => <div>
+    <Counter />
+</div>
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+    <Provider store={store}>
+        <React.StrictMode>
+            <App />
+        </React.StrictMode>
+    </Provider>
+
+)
+.....................................................................................
+			 Middlewares
+.....................................................................................
+
+What is middleware?
+ Middleware is collection of functions, used for some cross cutting concerns...
+
+eg:
+logging
+TimeTravel
+
+configureStore(middleware:[])
+/**
+   * An array of Redux middleware to install. If not supplied, defaults to
+   * the set of middleware returned by `getDefaultMiddleware()`.
+   */
+middleware?: ((getDefaultMiddleware: CurriedGetDefaultMiddleware<S>) => M) | M
+
+This function has already middlewars
+
+1.Immutability check middleware
+2.Serializability check middleware
+3.Action creator check middleware
+4.thunk
+
+ +
+
+Your middlewares
+
+To add Middleware
+
+Way 1:
+
+const middlewares = [thunk,immutableStateInvariant,seralizableStateInvariant]
+
+configureStore({
+ middleware: middleware
+})
+
+way 2:
+configureStore({
+ middleware: (getDefaultMiddleware)=>getDefaultMiddleware().concat(yourMiddleware)
+})
+
+Use case:
+Adding redux-logger:
+
+npm i --save redux-logger
+
+
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import { configureStore, createSlice } from '@reduxjs/toolkit'
+import { Provider, useDispatch, useSelector } from 'react-redux'
+import logger from 'redux-logger'
+
+//declare intial State:
+const initialState = {
+    value: 10
+}
+//create Slice
+const counterSlice = createSlice({
+    name: 'counter',
+    initialState,
+    reducers: {
+        //apis
+        increment(state) {
+            state.value++
+        },
+        decrement(state) {
+            state.value--
+        },
+        incrementByAmount(state, action) {
+            state.value += action.payload
+        }
+    }
+})
+//we have to extract reducers,actions from the slice
+
+const counterReduer = counterSlice.reducer
+const { increment, decrement, incrementByAmount } = counterSlice.actions
+
+
+const store = configureStore({
+    reducer: {
+        counter: counterReduer
+    },
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger)
+})
+
+///////////////////////////////////////////////////////
+const Counter = () => {
+    //hook to get redux state
+    const value = useSelector(state => {
+        return state.counter.value
+    })
+
+    const dispatch = useDispatch()
+
+    const onIncrement = () => {
+        //send action via dispatcher
+        dispatch({
+            type: increment
+        })
+    }
+
+    return <>
+        <h1>Counter {value}</h1>
+        <button onClick={onIncrement}>+</button>
+    </>
+}
+
+const App = () => <div>
+    <Counter />
+</div>
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+    <Provider store={store}>
+        <React.StrictMode>
+            <App />
+        </React.StrictMode>
+    </Provider>
+
+)
+....................................................................................
+			API Calls and Redux ToolKit
+....................................................................................
 
 
 

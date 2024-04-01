@@ -1,74 +1,76 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import { configureStore, createSlice } from '@reduxjs/toolkit'
-import { Provider, useDispatch, useSelector } from 'react-redux'
-import logger from 'redux-logger'
+import { createSlice, createAsyncThunk, configureStore } from '@reduxjs/toolkit'
+import { useEffect } from 'react'
+import { useDispatch, useSelector, Provider } from 'react-redux'
+import { createRoot } from 'react-dom/client';
 
-//declare intial State:
+
 const initialState = {
-    value: 10
+    entities: [],
+    loading: false,
 }
-//create Slice
-const counterSlice = createSlice({
-    name: 'counter',
-    initialState,
-    reducers: {
-        //apis
-        increment(state) {
-            state.value++
-        },
-        decrement(state) {
-            state.value--
-        },
-        incrementByAmount(state, action) {
-            state.value += action.payload
-        }
-    }
-})
-//we have to extract reducers,actions from the slice
 
-const counterReduer = counterSlice.reducer
-const { increment, decrement, incrementByAmount } = counterSlice.actions
-
-
-const store = configureStore({
-    reducer: {
-        counter: counterReduer
-    },
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger)
-})
-
-///////////////////////////////////////////////////////
-const Counter = () => {
-    //hook to get redux state
-    const value = useSelector(state => {
-        return state.counter.value
+const getPosts = createAsyncThunk(
+    'posts/getPosts',
+    async (thunkAPI) => {
+        const res = await fetch('https://jsonplaceholder.typicode.com/posts').then(
+            (data) => data.json()
+        )
+        return res
     })
 
-    const dispatch = useDispatch()
 
-    const onIncrement = () => {
-        //send action via dispatcher
-        dispatch({
-            type: increment
+export const postSlice = createSlice({
+    name: 'posts',
+    initialState,
+    reducers: {},
+    extraReducers(builder) {
+        builder.addCase(getPosts.pending, (state, action) => {
+            state.loading = true
+        }).addCase(getPosts.fulfilled, (state, {payload}) => {
+            state.loading = false
+            state.entities = payload
+        }).addCase(getPosts.rejected, (state, action) => {
+            state.loading = false
         })
     }
+   
+})
 
-    return <>
-        <h1>Counter {value}</h1>
-        <button onClick={onIncrement}>+</button>
-    </>
+export const postReducer = postSlice.reducer
+
+const appStore = configureStore({
+    reducer: {
+        posts: postReducer
+    }
+})
+export default function Home() {
+    const dispatch = useDispatch()
+    const { entities, loading } = useSelector((state) => state.posts)
+
+    useEffect(() => {
+        dispatch(getPosts())
+    }, [])
+
+    if (loading) return <p>Loading...</p>
+
+    return (
+        <div>
+            <h2>Blog Posts</h2>
+            {entities.map((post) => (
+                <p key={post.id}>{post.title}</p>
+            ))}
+        </div>
+    )
 }
 
-const App = () => <div>
-    <Counter />
-</div>
-
-ReactDOM.createRoot(document.getElementById('root')).render(
-    <Provider store={store}>
-        <React.StrictMode>
-            <App />
-        </React.StrictMode>
+const App = () => <div style={{ margin: 50, padding: 50, backgroundColor: 'ButtonFace' }}>
+    <Provider store={appStore}>
+        <h1 style={{ textAlign: 'center' }}>React Redux Integration App</h1>
+        <Home />
     </Provider>
 
-)
+</div>
+const container = document.getElementById('root');
+const root = createRoot(container);
+
+root.render(<App />);
